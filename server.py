@@ -1,6 +1,7 @@
 from controller import GoveeBLController
 from flask import Flask, request
 import sys
+import json
 
 app = Flask(__name__)
 addr = ""
@@ -34,8 +35,19 @@ def set_char():
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print("Usage: {} <addr>".format(sys.argv[0]))
+        print(f"Usage: {format(sys.argv[0])} <config file path>")
         sys.exit(1)
-    addr = sys.argv[1]
+    conf_path = sys.argv[1]
+
+    conf_data = ""
+    with open(conf_path, 'r') as conf_file:
+        conf_data = conf_file.read()
+
+    conf_dict = json.loads(conf_data)
+    addr = conf_dict["device.bl_address"]
+    host = conf_dict["server.address"]
+    port = conf_dict["server.port"]
+
     controller = GoveeBLController(addr)
-    app.run(host = "192.168.1.124", port = 5000)
+    print(f"Starting GoveeBLController with {addr}")
+    app.run(host = host, port = port)
