@@ -27,10 +27,8 @@ def set_char():
     if args["char"] == "brightness":
         controller.change_brightness(int(args["value"]))
     elif args["char"] == "color":
-        r = int(args["red"])
-        g = int(args["green"])
-        b = int(args["blue"])
-        controller.change_color((r, g, b))
+        color = tuple(int(args["value"][i:i+2], 16) for i in (0, 2, 4))
+        controller.change_color(color)
     return f"Changed {args['char']} of {addr}."
 
 if __name__ == '__main__':
