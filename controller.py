@@ -20,8 +20,9 @@ class GoveeBLController(object):
             try:
                 self.gatt.expect("Characteristic value was written successfully", timeout=1)
             except pexpect.exceptions.TIMEOUT:
-                print("Lost connection to device.")
-                sys.exit()
+                print("Lost connection to device. Trying to reconnect")
+                self.disconnect()
+                self.connect(True) # TODO: This is a bad implementation and needs to be fixed asap
             time.sleep(2)
 
     def connect(self, keep_alive):
